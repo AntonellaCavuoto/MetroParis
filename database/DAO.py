@@ -78,3 +78,22 @@ class DAO():
         conn.close()
         return result
 
+    @staticmethod
+    def getAllEdgesPesati():
+        conn = DBConnect.get_connection()
+
+        result = []
+
+        cursor = conn.cursor(dictionary=True)
+        query = """SELECT id_stazP, id_stazA, count(*) as n
+                    FROM connessione c
+                    group by id_stazP, id_stazA
+                    order by n desc"""
+
+        cursor.execute(query)
+
+        for row in cursor:
+            result.append((row["id_stazP"], row["id_stazA"], row["n"]))  # unpack delle righe
+        cursor.close()
+        conn.close()
+        return result
